@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{python}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{helpers}
+
+\begin{document}
+
+\title{A Solution Manual for: An Intermediate Course in Probability, Allan Gut.}
+\author{
+    Jim Holmstr\"{o}m\\
+    Ariel Ekgren\\
+    Gabriel Isheden\\
+}
+
+\maketitle
+
+\begin{python}
+import os
+import re
+
+class parseable(object):
+    def __init__(self):
+        raise Exception("parseable is abstract and shouldn't be instantiated")
+    def __int__(self):
+        return self.number 
+    def __str__(self):
+        return self.filename
+    def __repr__(self):
+        return self.filename
+    def __lt__(self, other):
+        return int(self) < int(other) 
+
+class chapter(parseable):
+    def __init__(self, filename):
+        """
+        Assumes that filename is checked to be valid
+        """
+        self.filename = filename
+        self.number = int(filename.replace("ch",""))
+        self.solutions = sorted(map(solution,
+            filter(is_solution,
+                filter(lambda name:not(os.path.isdir(name)),
+                    os.listdir(self.filename)
+                )
+            )
+        ))
+
+class solution(parseable):
+    def __init__(self, filename):
+        """
+        Assumes that filename is checked to be valid
+        """
+        self.filename = filename
+        self.number = int(filename.replace("sol","").replace(".tex",""))
+
+is_chapter = lambda name: bool(re.match(r'^ch[0-9]+$', name)) #$
+is_solution = lambda name: bool(re.match(r'^sol[0-9]+\.tex$', name)) #$
+
+chapters = sorted(map(chapter, 
+    filter(is_chapter,
+        filter(os.path.isdir, 
+            os.listdir('.')
+        )
+    )
+))
+
+for chapter in chapters:
+    print '\section{Chapter %d}'%int(chapter)
+    for solution in chapter.solutions:
+        filename = os.path.join(str(chapter), str(solution))
+        print '\subsection{Problem %d.%d}'%(int(chapter),int(solution))
+        print '\input{%s}'%filename
+\end{python}
+
+\end{document}
