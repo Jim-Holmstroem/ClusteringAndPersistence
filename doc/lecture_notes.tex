@@ -7,71 +7,65 @@
 
 \begin{document}
 
-\title{A Solution Manual for: An Intermediate Course in Probability, Allan Gut.}
+\title{
+    Lecture notes - Clustering and Persistence SF2704\\
+    \small{Teacher: Wojciech Chach\'{o}lski}
+}
 \author{
     Jim Holmstr\"{o}m\\
     Ariel Ekgren\\
     Gabriel Isheden\\
+    \small{\{jimho, ekgren, ...\}@kth.se}\\
 }
 
 \maketitle
 
 \begin{python}
+from __future__ import print_function, division
 import os
 import re
 
-class parseable(object):
-    def __init__(self):
-        raise Exception("parseable is abstract and shouldn't be instantiated")
-    def __int__(self):
-        return self.number 
+from functools import partial
+
+from abc import ABCMeta, abstractmethod
+
+top_level_folders = ['notes', 'exercises']
+
+def is_leaf(filename):
+    leaf_path = os.path.split(filename)[-1]
+    return bool(re.match(r'^[a-z]+_[1-9][0-9]*.tex$', leaf_path))
+
+class Leaf(object):
+    def __init__(self, path, filename):
+        assert(is_leaf(filename))
+        self.filename = filename
+        self.path = path
+        self.name, self.numbering = filename.replace('.tex','').split('_')
+        self.numbering = int(self.numbering)
+
     def __str__(self):
-        return self.filename
-    def __repr__(self):
-        return self.filename
-    def __lt__(self, other):
-        return int(self) < int(other) 
-
-class chapter(parseable):
-    def __init__(self, filename):
-        """
-        Assumes that filename is checked to be valid
-        """
-        self.filename = filename
-        self.number = int(filename.replace("ch",""))
-        self.solutions = sorted(map(solution,
-            filter(is_solution,
-                filter(lambda name:not(os.path.isdir(name)),
-                    os.listdir(self.filename)
-                )
+        with open(os.path.join(self.path, self.filename)) as file:
+            return "\\subsection*{{{name} {numbering}}}\n{data}".format(
+                name=self.name,
+                numbering=self.numbering,
+                data=file.read()
             )
-        ))
 
-class solution(parseable):
-    def __init__(self, filename):
-        """
-        Assumes that filename is checked to be valid
-        """
-        self.filename = filename
-        self.number = int(filename.replace("sol","").replace(".tex",""))
+    def __lt__(self, other):
+        return (self.name, self.numbering) < (other.name, other.numbering)
 
-is_chapter = lambda name: bool(re.match(r'^ch[0-9]+$', name)) #$
-is_solution = lambda name: bool(re.match(r'^sol[0-9]+\.tex$', name)) #$
-
-chapters = sorted(map(chapter, 
-    filter(is_chapter,
-        filter(os.path.isdir, 
-            os.listdir('.')
+for folder in top_level_folders:
+    print("\\section{{{name}}}".format(
+        name=folder
+    ))
+    leafs = sorted(map(partial(Leaf, folder),
+        filter(is_leaf,
+            os.listdir(folder)
         )
-    )
-))
+    ))
 
-for chapter in chapters:
-    print '\section{Chapter %d}'%int(chapter)
-    for solution in chapter.solutions:
-        filename = os.path.join(str(chapter), str(solution))
-        print '\subsection{Problem %d.%d}'%(int(chapter),int(solution))
-        print '\input{%s}'%filename
+    map(print, leafs)
+
 \end{python}
 
 \end{document}
