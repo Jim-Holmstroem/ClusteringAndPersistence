@@ -1,4 +1,5 @@
 \ProvidesFile{helpers}
+    \usepackage{tipx}
     \def\Equidistributed{\stackrel{d}{=}}
     \def\ConvergesAlmostSurely{\stackrel{a.s.}{\longrightarrow}}
     \def\ConvergesProbability{\stackrel{p}{\longrightarrow}}
@@ -38,3 +39,10 @@
     \def\CoVariance{{\rm Cov}\,}
     \def\Correlation{{\rm Corr}\,}
     \def\Expected{{\rm E}\,}
+
+    \newcommand{\setofpartitions}[1]{\ensuremath{{\rm P}\,\left(#1\right)}}
+    \def\disjunion{\bigsqcup}
+
+    \def\injective{\hookrightarrow}
+    \def\surjective{\twoheadrightarrow}
+    %\def\bijective{\hooktwoheadrightarrow} couldn't find the combination

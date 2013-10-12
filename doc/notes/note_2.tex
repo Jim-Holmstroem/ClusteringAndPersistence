@@ -12,19 +12,71 @@ the points in this finite set.
     d(x, y) + d(y, z) \le d(x, z) \forall x, y, z \in X
 \end{equation}
 
-A intresting submetric is the \emph{ultrametric} which has a stronger triangle
+An intresting submetric is the \emph{ultrametric} which has a strong triangle
 inequality contraint
 \begin{equation}
     \max\{d(x, y), d(y, z)\} \le d(x, z) \forall x, y, z \in X
 \end{equation}
+also called ultrametric inequality.
 
-Stated in another way for an ultrametric any 3 points
+Stated in another way, for an ultrametric any $3$ points, i.e. a triangle,
 will have the following property
-
 \begin{verbatim}
     <image of triangle with the sides (a, a, b <= a)>
 \end{verbatim}
 
+$\setofpartitions{X}$ is the set of partitions of $X$.
+A partition of $X$
+\begin{equation}
+    \sigma=\set{u_i}=\disjunion\limits_i u_i \in\setofpartitions{X}
+\end{equation}
+where $u_i\in\sigma$ is called a block.
+
+To be able to order partitionings we define
+\begin{equation}
+    \sigma \le \tau \Leftrightarrow \forall u\in\sigma\exists v\in\tau:
+    u\subset v
+\end{equation}
+
+A \emph{clustering} is just a function $\Psi$ in the form of a algorithm or
+procedure which maps a metric space
+$(X, d)$ to a partition of $X$
+
+\begin{equation}
+    \Psi : (X, d) \rightarrow \setofpartitions{X}
+\end{equation}
+
+The function
+$\Phi(X, d)\in \setofpartitions{X}$
+can have $3$ important properties
+
+\begin{description}
+    \item[Scale invariant]
+        Changing the scale for the distance does not change the partitioning
+        \begin{equation}
+            \Psi(X, d) = \Psi(X, \alpha d) \forall \alpha\in \RR_{++}
+        \end{equation}
+    \item[Rich]
+        $\Psi(X, d)\surjective\setofpartitions{X}$ i.e. surjective or onto the
+        set of partitions of $X$.
+        \begin{equation}
+            \forall \sigma\setofpartitions{X} \exists d : \Psi(X, d)=\sigma
+        \end{equation}
+    \item[Consistent]
+        $d'$ is such that you decrease the intrablock distance and increase the
+        extrablock distance for all blocks. This will correspond to making the
+        clusters more distinct. Let $x \sim_{\Psi(X, d)} y$ denote that $x$ and
+        $y$ belongs to the same block of the clustering $\Psi(X, d)$. Then $d'$
+        is a transformation such that:
+        \begin{equation}
+            d'(x, y) : \begin{cases}
+                \le d(x, y) & x\sim_{\Psi(X, d)} y\\
+                \ge d(x, y) & x\not\sim_{\Psi(X, d)} y\\
+            \end{cases}
+        \end{equation}
+        (not in notes; but it should be that $\Psi(X, d)=\Psi(X, d')\forall d'$
+        fullfilling the above property)
+\end{description}
 
 %----------------------
 
