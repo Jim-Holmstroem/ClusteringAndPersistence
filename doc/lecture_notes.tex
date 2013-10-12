@@ -20,6 +20,8 @@
 
 \maketitle
 
+\input{intro.tex}
+
 \begin{python}
 from __future__ import print_function, division
 import os
@@ -29,7 +31,7 @@ from functools import partial
 
 from abc import ABCMeta, abstractmethod
 
-top_level_folders = ['notes', 'exercises']
+top_level_folders = ['notes', 'exercises', 'code']
 
 def is_leaf(filename):
     leaf_path = os.path.split(filename)[-1]
