@@ -80,6 +80,48 @@ can have $3$ important properties
 
 %----------------------
 
+According to the Kleinberg theorem<ref> a $\Phi$ satisfying all these properties
+does not exists.
+
+Consider the set of $3$ points $\set{a, b, c}$, then a metric can be
+represented by a matrix
+\begin{equation}
+    \begin{tabular}{l|*{3}c}
+          & a & b & c\\
+        \hline
+        a & 0 & x & y\\
+        b & x & 0 & z\\
+        c & y & z & 0\\
+    \end{tabular}
+\end{equation}
+which satisfies the triangle inequality
+\begin{equation}
+    \begin{cases}
+        d(a, b) + d(b, c) \le d(a, c)\\
+        d(a, c) + d(c, b) \le d(a, b)\\
+        d(b, a) + d(a, c) \le d(b, c)\\
+    \end{cases}\Rightarrow
+    \begin{cases}
+        x + z \le y\\
+        y + z \le x\\
+        x + y \le z\\
+    \end{cases}
+\end{equation}
+
+That is the distances is
+\begin{equation}
+    \left\{ %TODO make this a helper, setcomprehension
+        (x, y, z)
+    \left|
+        \begin{split}
+            x + z \le y\\
+            y + z \le x\\
+            x + y \le z\\
+        \end{split}
+    \right.\right\}
+\end{equation}
+which is an intersection of $3$ halfspaces.
+
 %----------------------
 
 %----------------------
