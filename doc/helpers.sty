@@ -35,6 +35,17 @@
         \left\{{#1}\right\}
     }
 
+    \newcommand{\distancetriangle}[6]{
+        \begin{tikzpicture}
+            \node (a) at (0, 0) {#1};
+            \node (b) at +(0: 3) {#2};
+            \node (c) at +(60: 3) {#3};
+            \foreach \from/\name/\to in {a/#4/b, b/#5/c, c/#6/a}
+                \path (\from) to node {\name} (\to);
+                %\draw [-] (\from) -- (\to) {\name};
+        \end{tikzpicture}
+    }
+
     \def\Variance{{\rm Var}\,}
     \def\CoVariance{{\rm Cov}\,}
     \def\Correlation{{\rm Corr}\,}
@@ -46,3 +57,9 @@
     \def\injective{\hookrightarrow}
     \def\surjective{\twoheadrightarrow}
     %\def\bijective{\hooktwoheadrightarrow} couldn't find the combination
+
+    \let\bbordermatrix\bordermatrix
+    \patchcmd{\bbordermatrix}{8.75}{4.75}{}{}
+    \patchcmd{\bbordermatrix}{\left(}{\left[}{}{}
+    \patchcmd{\bbordermatrix}{\right)}{\right]}{}{}
+

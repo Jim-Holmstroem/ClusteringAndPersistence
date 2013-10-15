@@ -122,6 +122,34 @@ That is the distances is
 \end{equation}
 which is an intersection of $3$ halfspaces.
 
+<def> An isometry
+\begin{equation}
+    f : (X, d_x) \rightarrow (Y, d_y)
+\end{equation}
+is a bijection such that
+\begin{equation}
+    d_x(x_i, x_j) = d_y(f(x_i), f(x_j))
+\end{equation}
+
+in other words a distance preserving map.
+
+
+%\begin{bordermatrix}
+%    ~ & x & y \cr
+%    A & 1 & 0 \cr
+%    B & 0 & 1 \cr
+%\end{bordermatrix}
+\begin{equation}
+%    \bordermatrix{
+%          & a & b & c\\
+%        a & 0 & x & y\\
+%        b & x & 0 & z\\
+%        c & y & z & 0\\
+%    }
+    \mapsto
+    \distancetriangle{a}{b}{c}{x}{y}{z}
+\end{equation}
+
 %----------------------
 
 %----------------------
