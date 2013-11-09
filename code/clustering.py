@@ -1,11 +1,14 @@
 from __future__ import print_function, division
 
+from functools import partial
 from abc import abstractmethod, ABCMeta
 
 import numpy as np
 
 def distance_matrix(distance, a, b):
     return map(distance, product(a, b))
+
+SingeltonSet = partial(map, lambda x: {x})
 
 class Distance(object):
     __metaclass__ = ABCMeta
@@ -48,12 +51,22 @@ class HL(SetDistance):
         raise NotImplementedError('HL not implemented yet, needs housendorf distance')  # TODO does it need another type of `distance_matrix`?!
 
 class HC(object):
-    def __init__(self, d):
-        assert(isinstance(d, SetDistance))
+    def __init__(self, distance):
+        assert(isinstance(distance, SetDistance))
+        self.distance = distance
 
     def __call__(self, X):
-        # TODO how to do the recursion in the simplest way?
+        """
+        Parameters
+        ----------
+        X : [block : {x : object}]
+
+        Returns
+        -------
+        clustering : [(distance : float, [block : {x : object}])]
+        """
 
 
-X = range(5)
+
+X = SingeltonSet(range(5))
 print(HC(SL)(X))
