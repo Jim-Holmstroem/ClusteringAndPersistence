@@ -25,12 +25,13 @@ def symmetric_lazy(f):  # TODO breakout the lazy parts of the code
     """
     @wraps(f)
     def _f(self, i, j):
-        key = (self.distance.__call__.im_func, i, j)
-        key_transpose = (self.distance.__call__.im_func, j, i)
+        distance_function = self.distance.__call__.im_func
+        key = (distance_function, i, j)
+        key_transpose = (distance_function, j, i)
         if not (key in _f.__cache or key_transpose in _f.__cache):
             _f.__cache[key] = f(self, i, j)
 
-        value = _f.__cache(key) if key in _f.__cache else _f.__cache(key_transpose)
+        value = _f.__cache[key] if key in _f.__cache else _f.__cache[key_transpose]
 
         return value
 
@@ -111,10 +112,14 @@ class HC(object):
             combinations(X, r=2)
         )
 
+        # NOTE doesn't handle multiple linkage, return more AB and link/remove all below in a more general form (A, B)-> As higher order union = partial(reduce, union) and X-As #min_with_arg_by returns (frozenset, float)
+
         return [
             (min_distance, X)  # NOTE if intended to return something else here is the spot
         ] + (
-            self.__call__((X - (A | B)) | (A | B))
+            self(
+                (X - {A, B}) | (A | B)
+            )
         )
 
 
