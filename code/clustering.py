@@ -1,19 +1,28 @@
 from __future__ import print_function, division
 
-from itertools import combinations
+from itertools import combinations, product
 from functools import partial, wraps
 from abc import abstractmethod, ABCMeta
 
 import numpy as np
 
 def distances(distance, a, b):
-    return map(distance, product(a, b))
+    return list(starmap(distance, product(a, b)))
 
-def min_with_arg_by(f, A):
-    min_, min_arg = min(map(lambda a: (f(a), a), A))
+def apply(f, *args, **kwargs):  # NOTE overwrites depricated builtin
+    return f(*args, **kwargs)
+
+def composition(f, *g):
+    if g:
+        return lambda *x: f(composition(*g)(*x))
+    else:
+        return f
+
+def min_with_arg_by(f, ABs):
+    min_, min_arg = min(starmap(lambda a, b: (f(a, b), (a, b)), ABs))
     return min_arg, min_
 
-SingeltonSet = partial(frozenset, partial(map, lambda x: frozenset([x, ])))
+SingeltonSet = composition(frozenset, partial(map, lambda x: frozenset([x, ])))
 
 filter_non_equal = partial(filter, lambda (x_i, x_j) : x_i == x_j)
 
@@ -39,8 +48,7 @@ def symmetric_lazy(f):  # TODO breakout the lazy parts of the code
 
     return _f
 
-def symmetric_lazy(f):
-    class Distance(object):
+class Distance(object):
     __metaclass__ = ABCMeta
     @abstractmethod
     def __call__(self, a, b):
@@ -118,11 +126,11 @@ class HC(object):
             (min_distance, X)  # NOTE if intended to return something else here is the spot
         ] + (
             self(
-                (X - {A, B}) | (A | B)
+                (X - {A, B}) | {A | B}
             )
         )
 
-
-X = SingeltonSet(range(5))
-for set_distance in [SL, CL, AL]:
-    print(HC(set_distance)(X))
+X = SingeltonSet([1, 2.1, 3.2, 4.4, 5.8])
+for set_distance in starmap(apply, product([SL, CL, AL], [EuclideanDistance()])):
+    map(print, HC(set_distance)(X))
+    print()
